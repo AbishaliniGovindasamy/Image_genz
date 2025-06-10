@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
 import { motion as Motion } from 'framer-motion';
+import { AppContext } from '../context/AppContext';
 
 
 const Result = () => {
+
 
 const [image, setImage] = useState(assets.sample_img_1)
 
@@ -13,7 +15,21 @@ const [loading, setLoading] = useState(false)
 
 const [input,setInput] = useState("")
 
+
+const {generateImage} = useContext(AppContext)
+
 const onSubmitHandler = async(e) =>{
+      e.preventDefault()
+      setLoading(true)
+
+      if(input){
+        const image = await generateImage(input)
+        if(image){
+          setIsImageLoaded(true)
+          setImage(image)
+        }
+      }
+      setLoading(false)
 
 }
 
@@ -31,7 +47,7 @@ const onSubmitHandler = async(e) =>{
     onSubmit={onSubmitHandler}  className='flex flex-col min-h-[90vh] justify-center items-center'>
     <div>
       <div className='relative'>
-        <img  src={assets.sample_img_1} className='max-w-sm rounded'/>
+        <img  src={image} className='max-w-sm rounded'/>
        <span  className={`absolute bottom-0 left-0 h-1
         bg-blue-500 $ {loading ? 'w-full transition-all duration-[10s]' : 'w-0'}`}/>
        </div>
