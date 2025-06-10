@@ -111,7 +111,7 @@ const verifyRazorpay = async (req, res) => {
     if (transaction.payment) return res.json({ success: false, message: 'Payment already processed' });
 
     const user = await userModel.findById(transaction.userId);
-    const newCredits = (user.creditBalance || 0) + transaction.credits;
+const newCredits = Number(user.creditBalance || 0) + Number(transaction.credits);
 
     await userModel.findByIdAndUpdate(user._id, { creditBalance: newCredits });
     await transactionModel.findByIdAndUpdate(transaction._id, { payment: true });
